@@ -1,4 +1,10 @@
 {
-  "todos": [],
-  "nextId": 1
+  "todos": [
+    {
+      "id": 1,
+      "text": "sup",
+      "done": false
+    }
+  ],
+  "nextId": 2
 }
