@@ -26,6 +26,9 @@ const DUR_UNITS = {
   h: 3600000, hr: 3600000, hrs: 3600000, hour: 3600000, hours: 3600000,
   d: 86400000, day: 86400000, days: 86400000,
   w: 604800000, week: 604800000, weeks: 604800000,
+  // A "month" is a fixed 30-day window (round schemes need fixed lengths).
+  // Bare "m" stays unmapped on purpose — minutes vs months is too ambiguous.
+  mo: 2592000000, month: 2592000000, months: 2592000000,
 };
 function parseDuration(v) {
   if (typeof v === 'number' && Number.isFinite(v) && v > 0) return Math.floor(v);
