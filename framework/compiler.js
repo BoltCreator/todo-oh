@@ -375,9 +375,16 @@ function buildRuntime(config) {
 
 function compile(html, config) {
   var script = '\n<script data-app-runtime>\n' + buildRuntime(config) + '\n</script>\n';
-  if (/<\/body>/i.test(html)) return html.replace(/<\/body>/i, script + '</body>');
-  if (/<\/html>/i.test(html)) return html.replace(/<\/html>/i, script + '</html>');
-  return html + script;
+  // Inject before the LAST closing tag: a page's own scripts may legitimately
+  // contain the literal text "</body>" (a template string, a comment about the
+  // page structure, …), and matching the FIRST occurrence would split that
+  // script in half and spill the rest of it into the document as markup.
+  var insertBeforeLast = function (tag) {
+    var idx = html.toLowerCase().lastIndexOf(tag);
+    if (idx === -1) return null;
+    return html.slice(0, idx) + script + html.slice(idx);
+  };
+  return insertBeforeLast('</body>') || insertBeforeLast('</html>') || (html + script);
 }
 
 module.exports = { compile, buildRuntime, loginNextHref };
